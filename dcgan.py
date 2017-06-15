@@ -94,7 +94,6 @@ for epoch in range(200):
         
         d_loss = d_real_loss + d_fake_loss
         D.zero_grad()
-        G.zero_grad()
         
         d_loss.backward(retain_variables=True)
         d_optimizer.step()
