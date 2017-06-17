@@ -7,11 +7,13 @@ The main idea behind a GAN is to have two competing neural network models. One t
 
 # Result
 ![fake_images-200](https://user-images.githubusercontent.com/28016169/27252817-1d2c8010-5385-11e7-91eb-95c277648f28.png)
-(200 epochs)
+![fake_images-199](https://user-images.githubusercontent.com/28016169/27252945-a5fc9824-5387-11e7-9241-e3144cb4bf89.png)
+![fake_images-198](https://user-images.githubusercontent.com/28016169/27252950-bc68ba0c-5387-11e7-9cd0-1a6d848ce738.png)
+
 
 # Note
 1. Use more convolutional layers in generator for better performance.
 2. Binary noise(sequence of -1, 1) works amazingly well.
 
 # Credit
-Most of the code is borrowed from [a link](https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/deep_convolutional_gan)
+Most of the code is borrowed from [yunjey](https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/deep_convolutional_gan)
