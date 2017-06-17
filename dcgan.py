@@ -73,7 +73,7 @@ class Discriminator(nn.Module):
         
         return out
     
-    D = Discriminator()
+D = Discriminator()
 G = Generator()
 
 d_optimizer = torch.optim.Adam(D.parameters(), lr=0.0003, betas = (0.5, 0.999))
