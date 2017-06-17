@@ -13,6 +13,7 @@ import torch.nn.functional as F
 from torchvision import datasets 
 from torchvision import transforms
 from torchvision.utils import save_image
+import numpy as np
 
 def denorm(x):
     out = (x+1)/2
@@ -51,28 +52,32 @@ class Discriminator(nn.Module):
         
         return out
 
-class Generator(nn.Module):
+  class Generator(nn.Module):
     def __init__(self):
         super(Generator, self).__init__()
-        self.linear = nn.Linear(100, 32*7*7)
+        self.linear = nn.Linear(100, 64*7*7)
         self.layer1 = nn.Sequential(
+                nn.ConvTranspose2d(64, 32, kernel_size=4, padding=1, stride=2),
+                nn.BatchNorm2d(32))
+        self.layer2 = nn.Sequential(
                 nn.ConvTranspose2d(32, 16, kernel_size=4, padding=1, stride=2),
                 nn.BatchNorm2d(16))
-        self.layer2 = nn.ConvTranspose2d(16, 1, kernel_size=4, padding=1, stride=2)
+        self.layer3 = nn.ConvTranspose2d(16, 1, kernel_size=5, padding=2)
         
     def forward(self, z):
         out = F.leaky_relu(self.linear(z), 0.05)
-        out = out.view(out.size(0), 32, 7, 7)
+        out = out.view(out.size(0), 64, 7, 7)
         out = F.leaky_relu(self.layer1(out), 0.05)
-        out = F.tanh(self.layer2(out))
-            
+        out = F.leaky_relu(self.layer2(out), 0.05)
+        out = F.tanh(self.layer3(out))
+        
         return out
-
-D = Discriminator()
+    
+    D = Discriminator()
 G = Generator()
 
-d_optimizer = torch.optim.Adam(D.parameters(), lr=0.0003)
-g_optimizer = torch.optim.Adam(G.parameters(), lr=0.0003)
+d_optimizer = torch.optim.Adam(D.parameters(), lr=0.0003, betas = (0.5, 0.999))
+g_optimizer = torch.optim.Adam(G.parameters(), lr=0.0003, betas = (0.5, 0.999))
 
 D.zero_grad()
 G.zero_grad()
@@ -86,7 +91,7 @@ for epoch in range(200):
         d_real_loss = torch.mean((output-1)**2)
         real_score = output
         
-        z = Variable(torch.randn(batch_size, 100))
+        z = Variable(2*((torch.randn(batch_size, 100).bernoulli_(0.5))-0.5))
         fake_images = G(z)
         output = D(fake_images)
         d_fake_loss = torch.mean((output)**2)
@@ -98,7 +103,7 @@ for epoch in range(200):
         d_loss.backward(retain_variables=True)
         d_optimizer.step()
         
-        z = Variable(torch.randn(batch_size, 100))
+        z = Variable(2*((torch.randn(batch_size, 100).bernoulli_(0.5))-0.5))
         fake_images = G(z)
         output = D(fake_images)
         g_loss = torch.mean((output-1)**2)
@@ -117,3 +122,5 @@ for epoch in range(200):
             
     fake_images = fake_images.view(fake_images.size(0), 1, 28, 28)
     save_image(denorm(fake_images.data), '/Users/Pranjal/Downloads/data/dcgan/fake_images-%d.png' %(epoch+1))
+
+    
