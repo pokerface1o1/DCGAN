@@ -11,7 +11,7 @@ The main idea behind a GAN is to have two competing neural network models. One t
 
 # Note
 1. Use more convolutional layers in generator for better performance.
-2. Binary noise (sequence of -1, 1) works amazingly well.
+2. Binary noise(sequence of -1, 1) works amazingly well.
 
 # Credit
-Most of the code is borrowed from https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/deep_convolutional_gan
+Most of the code is borrowed from [a link](https://github.com/yunjey/pytorch-tutorial/tree/master/tutorials/03-advanced/deep_convolutional_gan)
