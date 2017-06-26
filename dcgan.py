@@ -51,8 +51,8 @@ class Discriminator(nn.Module):
         out = F.sigmoid(self.fc(out))
         
         return out
-
-  class Generator(nn.Module):
+    
+class Generator(nn.Module):
     def __init__(self):
         super(Generator, self).__init__()
         self.linear = nn.Linear(100, 64*7*7)
